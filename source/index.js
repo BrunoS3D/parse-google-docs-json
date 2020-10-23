@@ -1,7 +1,9 @@
+const json2md = require("json2md");
 const googleapis = require("googleapis");
+
 const { google } = googleapis;
 
-const { convertGoogleDocumentToJson, convertJsonToMarkdown } = require("./parser.js");
+const { convertGoogleDocumentToJson } = require("./parser.js");
 
 async function parseGoogleDocs(configuration = {}) {
     const docsInstance =
@@ -33,13 +35,13 @@ async function parseGoogleDocs(configuration = {}) {
     }
 
     function toMarkdown(removeEmptyParagraphs = false) {
-        const jsonDocument = convertGoogleDocumentToJson(docsResponse.data);
+        const jsonContent = convertGoogleDocumentToJson(docsResponse.data).content;
 
         if (removeEmptyParagraphs) {
-            jsonDocument.content = jsonDocument.content.filter((el) => !("p" in el) || el["p"] !== "");
+            jsonContent = jsonContent.filter((el) => !("p" in el) || el["p"] !== "");
         }
 
-        return convertJsonToMarkdown(jsonDocument);
+        return json2md(jsonContent);
     }
 
     return {
