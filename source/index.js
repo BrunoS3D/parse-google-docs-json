@@ -35,13 +35,8 @@ async function parseGoogleDocs(configuration = {}) {
     }
 
     function toMarkdown(removeEmptyParagraphs = false) {
-        const jsonContent = convertGoogleDocumentToJson(docsResponse.data).content;
-
-        if (removeEmptyParagraphs) {
-            jsonContent = jsonContent.filter((el) => !("p" in el) || el["p"] !== "");
-        }
-
-        return json2md(jsonContent);
+        let jsonContent = convertGoogleDocumentToJson(docsResponse.data).content;
+        return json2md(removeEmptyParagraphs ? jsonContent.filter((el) => !("p" in el) || el["p"] !== "") : jsonContent);
     }
 
     return {
