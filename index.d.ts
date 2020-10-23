@@ -1,5 +1,6 @@
 declare module "parse-google-docs-json" {
     interface Configuration {
+        docs?: any;
         documentId?: string;
     }
 
