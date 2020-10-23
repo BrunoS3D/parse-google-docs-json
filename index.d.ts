@@ -9,7 +9,9 @@ declare module "parse-google-docs-json" {
     function parseGoogleDocs(
         configuration?: Configuration
     ): {
-        toJson: () => {
+        toJson: (
+            removeEmptyParagraphs = false
+        ) => {
             cover: {
                 image: string;
                 title: string;
@@ -20,7 +22,7 @@ declare module "parse-google-docs-json" {
                 title: string;
             };
         };
-        toMarkdown: () => string;
+        toMarkdown: (removeEmptyParagraphs = false) => string;
     };
 
     export = parseGoogleDocs;

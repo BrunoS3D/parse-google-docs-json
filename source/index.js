@@ -19,8 +19,12 @@ async function parseGoogleDocs(configuration = {}) {
         documentId: documentId,
     });
 
-    function toJson() {
+    function toJson(removeEmptyParagraphs = false) {
         const jsonDocument = convertGoogleDocumentToJson(docsResponse.data);
+
+        if (removeEmptyParagraphs) {
+            jsonDocument.content = jsonDocument.content.filter((el) => !("p" in el) || el["p"] !== "");
+        }
 
         return {
             metadata: { title: docsResponse.data.title },
@@ -28,9 +32,14 @@ async function parseGoogleDocs(configuration = {}) {
         };
     }
 
-    function toMarkdown() {
-        const documentInJson = convertGoogleDocumentToJson(docsResponse.data);
-        return convertJsonToMarkdown(documentInJson);
+    function toMarkdown(removeEmptyParagraphs = false) {
+        const jsonDocument = convertGoogleDocumentToJson(docsResponse.data);
+
+        if (removeEmptyParagraphs) {
+            jsonDocument.content = jsonDocument.content.filter((el) => !("p" in el) || el["p"] !== "");
+        }
+
+        return convertJsonToMarkdown(jsonDocument);
     }
 
     return {
