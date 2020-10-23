@@ -3,18 +3,19 @@ const { google } = googleapis;
 
 const { convertGoogleDocumentToJson, convertJsonToMarkdown } = require("./parser.js");
 
-const docs = google.docs({
-    version: "v1",
-});
-
 async function parseGoogleDocs(configuration = {}) {
+    const docsInstance =
+        configuration.docs ||
+        google.docs({
+            version: "v1",
+        });
     const documentId = configuration.documentId;
 
     if (!documentId) {
         throw new Error('Please, provide "documentId" in the constructor');
     }
 
-    const docsResponse = await docs.documents.get({
+    const docsResponse = await docsInstance.documents.get({
         documentId: documentId,
     });
 
